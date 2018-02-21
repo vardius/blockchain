@@ -1,0 +1,35 @@
+version: '3.3'
+services:
+  wallet:
+    image: golang:latest
+    container_name: blockchain_wallet
+    environment:
+      - GRPC_TRACE=all
+      - GRPC_VERBOSITY=DEBUG
+    env_file:
+      - cmd/wallet/.env
+    expose:
+      - "80"
+    ports:
+      - "80:80"
+    volumes:
+      - ./:/go/src/github.com/vardius/blockchain
+    links:
+      - server
+    working_dir: /go/src/github.com/vardius/blockchain
+    command: go run cmd/wallet/main.go
+
+  server:
+    image: golang:latest
+    container_name: blockchain_server
+    environment:
+      - GRPC_TRACE=all
+      - GRPC_VERBOSITY=DEBUG
+    env_file:
+      - cmd/server/.env
+    expose:
+      - "3000"
+    volumes:
+      - ./:/go/src/github.com/vardius/blockchain
+    working_dir: /go/src/github.com/vardius/blockchain
+    command: go run cmd/server/main.go
