@@ -18,17 +18,17 @@ type Wallet interface {
 }
 
 // TODO(vardius): add uuid to wallet
-type wallet struct {
+type httpWallet struct {
 	client client.BlockchainClient
 }
 
-// New creates new wallet instance
-func New(c client.BlockchainClient) Wallet {
-	return &wallet{c}
+// NewHTTP creates new http wallet instance
+func NewHTTP(c client.BlockchainClient) Wallet {
+	return &httpWallet{c}
 }
 
 // Run runs the http server
-func (wl *wallet) Run(host string, port int) error {
+func (wl *httpWallet) Run(host string, port int) error {
 	router := wl.newRouter()
 
 	s := &http.Server{
@@ -45,7 +45,7 @@ func (wl *wallet) Run(host string, port int) error {
 }
 
 // newRouter creates http handler
-func (wl *wallet) newRouter() http.Handler {
+func (wl *httpWallet) newRouter() http.Handler {
 	router := gorouter.New()
 	router.GET("/", http.HandlerFunc(wl.getBlockchain))
 	router.POST("/", http.HandlerFunc(wl.writeBlock))
@@ -53,7 +53,7 @@ func (wl *wallet) newRouter() http.Handler {
 	return router
 }
 
-func (wl *wallet) getBlockchain(w http.ResponseWriter, r *http.Request) {
+func (wl *httpWallet) getBlockchain(w http.ResponseWriter, r *http.Request) {
 	bc, err := wl.client.GetBlockchain()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -70,7 +70,7 @@ func (wl *wallet) getBlockchain(w http.ResponseWriter, r *http.Request) {
 	io.WriteString(w, string(bytes))
 }
 
-func (wl *wallet) writeBlock(w http.ResponseWriter, r *http.Request) {
+func (wl *httpWallet) writeBlock(w http.ResponseWriter, r *http.Request) {
 	var message struct {
 		Data string `json:"data"`
 	}

@@ -30,7 +30,7 @@ func main() {
 	}
 
 	c := client.New(cfg.ServerHost, cfg.ServerPort)
-	w := wallet.New(c)
+	w := wallet.NewHTTP(c)
 
 	w.Run(cfg.Host, cfg.Port)
 }
