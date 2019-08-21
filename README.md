@@ -1,4 +1,4 @@
-Vardius - blockchain
+blockchain
 ================
 [![Build Status](https://travis-ci.org/vardius/blockchain.svg?branch=master)](https://travis-ci.org/vardius/blockchain)
 [![Go Report Card](https://goreportcard.com/badge/github.com/vardius/blockchain)](https://goreportcard.com/report/github.com/vardius/blockchain)
